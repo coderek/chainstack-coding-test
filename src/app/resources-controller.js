@@ -18,29 +18,29 @@ module.exports = {
       ctx.throw(429, 'Quota is reached')
     }
     const { name } = ctx.request.body
-    const createdId = await db.createResource(name, user.id)
+    const created = await db.createResource(name, user.id)
     ctx.body = {
       message: 'Created successfully',
-      id: createdId
+      id: created.id
     }
     // admin has negative quota
     if (user.quota>0) {
-      db.setQuota(user.id, user.quota - 1)
+      await db.setQuota(user.id, user.quota - 1)
     }
   },
   async delete(ctx) {
     const user = await ctx.state.user
     const id = ctx.params.id
-    let deletedId = null
+    let deleted = null
     if (user.role === 'admin') {
-      deletedId = await db.deleteResource(id)
+      deleted = await db.deleteResource(id)
     } else {
-      deletedId = await db.deleteUserResource(id, user.id)
+      deleted = await db.deleteUserResource(id, user.id)
     }
-    if (deletedId) {
+    if (deleted) {
       ctx.body = {
         message: 'Deleted successfully',
-        id,
+        id: deleted.id
       }
     } else {
       ctx.throw(404, 'Resource is not found.')

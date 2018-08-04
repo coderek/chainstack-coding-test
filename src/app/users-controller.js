@@ -1,14 +1,11 @@
 const db = require('../db')
 
 module.exports = {
-  async list() {
-
+  async list(ctx) {
+    ctx.body = await db.listUsers()
   },
 
-  get() {
-  },
-
-  async post(ctx, next) {
+  async post(ctx) {
     const {email, password} = ctx.request.body
     //TODO validation
     try {
@@ -18,14 +15,26 @@ module.exports = {
       }
     } catch (e) {
       ctx.body = {
-        error: e.toString()
+        error: e.toString(),
       }
     }
   },
-  delete() {
+  async delete(ctx) {
+    const deleted = await db.deleteUser(ctx.params.id)
+    if (deleted) {
+      ctx.body = {
+        message: 'Deleted successfully',
+        id: deleted.id,
+      }
+    } else {
+      ctx.throw(404, 'Resource is not found.')
+    }
   },
-  quota() {
-
+  async quota(ctx) {
+    await db.setQuota(ctx.query.id, ctx.request.body.quota)
+    ctx.body = {
+      message: 'Quota is updated.'
+    }
   },
 }
 

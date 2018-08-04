@@ -24,7 +24,7 @@ module.exports = {
     `, [sessionId]).then(result => result.rows[0])
   },
   createSession(sessionId, userId) {
-    //NOTE move expiry duration to config
+    //TODO move expiry duration to config
     return client.query(
       'INSERT INTO sessions (session_id, user_id, expires_at) VALUES ($1, $2, $3)',
       [sessionId, userId, moment().add(2, 'hours').toDate()])
@@ -32,8 +32,8 @@ module.exports = {
   createUser(email, password) {
     return client.query(`
       INSERT INTO users (email, password_hash) VALUES
-      ($1, $2)
-    `, [email, bcrypt.hashSync(password, 10)])
+      ($1, $2) RETURNING id
+    `, [email, bcrypt.hashSync(password, 10)]).then(result => result[0])
   },
   listUsers() {
     return client.query(`
@@ -42,8 +42,8 @@ module.exports = {
   },
   deleteUser(userId) {
     return client.query(`
-      DELETE FROM users WHERE id=$1
-    `, [userId])
+      DELETE FROM users WHERE id=$1 RETURNING id
+    `, [userId]).then(result => result[0])
   },
   listResources() {
     return client.query(`
@@ -57,13 +57,13 @@ module.exports = {
   },
   deleteResource(resourceId) {
     return client.query(`
-      DELETE FROM resources WHERE id=$1
-    `, [resourceId])
+      DELETE FROM resources WHERE id=$1 RETURNING id
+    `, [resourceId]).then(result => result[0])
   },
   deleteUserResource(resourceId, userId) {
     return client.query(`
-      DELETE FROM resources WHERE id=$1 AND owner=$2
-    `, [resourceId, userId])
+      DELETE FROM resources WHERE id=$1 AND owner=$2 RETURNING id
+    `, [resourceId, userId]).then(result => result[0])
   },
   createResource(name, owner) {
     return client.query(`
