@@ -1,17 +1,14 @@
 const db = require('../db')
 
 module.exports = {
-  list() {
+  async list() {
+
   },
 
   get() {
   },
 
   async post(ctx, next) {
-    const user = await ctx.state.user
-    if (!user || user.role !== 'admin') {
-      ctx.throw(401)
-    }
     const {email, password} = ctx.request.body
     //TODO validation
     try {
