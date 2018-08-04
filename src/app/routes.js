@@ -9,13 +9,11 @@ const routes = [
   // users
   ['/resources', 'POST', resourcesController.post, ['normal']],
   ['/resources', 'GET', resourcesController.list, ['normal']],
-  ['/resources/:id', 'GET', resourcesController.get, ['normal']],
   ['/resources/:id', 'DELETE', resourcesController.delete, ['normal']],
 
   // admin only
   ['/users', 'POST', usersController.post, ['admin']],
   ['/users', 'GET', usersController.list, ['admin']],
-  ['/users/:id', 'GET', usersController.get, ['admin']],
   ['/users/:id', 'DELETE', usersController.delete, ['admin']],
 
   // admin only
