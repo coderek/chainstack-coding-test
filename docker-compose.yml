@@ -1,0 +1,10 @@
+version: '3.4'
+services:
+  db:
+    image: 'postgres'
+    ports:
+      - '5434:5432'
+    environment:
+      - POSTGRES_DB=chainstack
+      - POSTGRES_USER=cs
+      - POSTGRES_PASSWORD=abc
