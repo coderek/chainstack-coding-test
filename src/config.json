@@ -1,0 +1,18 @@
+{
+  "database": {
+    "main": {
+      "user": "cs",
+      "host": "0.0.0.0",
+      "database": "chainstack",
+      "password": "abc",
+      "port": 5434
+    },
+    "test": {
+      "user": "cs",
+      "host": "0.0.0.0",
+      "database": "chainstack",
+      "password": "abc",
+      "port": 5435
+    }
+  }
+}

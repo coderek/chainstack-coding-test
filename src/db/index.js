@@ -1,13 +1,18 @@
 const {Client} = require('pg')
 const moment = require('moment')
 const bcrypt = require('bcrypt')
+const config = require('../config.json')
+
+let dbConfig = null
+
+if (process.env.NODE_ENV === 'test') {
+  dbConfig = config.database.test
+} else {
+  dbConfig = config.database.main
+}
 
 const client = new Client({
-  user: 'cs',
-  host: '0.0.0.0',
-  database: 'chainstack',
-  password: 'abc',
-  port: 5434,
+  ...dbConfig
 })
 client.connect()
 
@@ -33,7 +38,7 @@ module.exports = {
     return client.query(`
       INSERT INTO users (email, password_hash) VALUES
       ($1, $2) RETURNING id
-    `, [email, bcrypt.hashSync(password, 10)]).then(result => result[0])
+    `, [email, bcrypt.hashSync(password, 10)]).then(result => result.rows[0])
   },
   listUsers() {
     return client.query(`
@@ -43,7 +48,7 @@ module.exports = {
   deleteUser(userId) {
     return client.query(`
       DELETE FROM users WHERE id=$1 RETURNING id
-    `, [userId]).then(result => result[0])
+    `, [userId]).then(result => result.rows[0])
   },
   listResources() {
     return client.query(`
@@ -58,12 +63,12 @@ module.exports = {
   deleteResource(resourceId) {
     return client.query(`
       DELETE FROM resources WHERE id=$1 RETURNING id
-    `, [resourceId]).then(result => result[0])
+    `, [resourceId]).then(result => result.rows[0])
   },
   deleteUserResource(resourceId, userId) {
     return client.query(`
       DELETE FROM resources WHERE id=$1 AND owner=$2 RETURNING id
-    `, [resourceId, userId]).then(result => result[0])
+    `, [resourceId, userId]).then(result => result.rows[0])
   },
   createResource(name, owner) {
     return client.query(`

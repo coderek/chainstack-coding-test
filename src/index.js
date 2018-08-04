@@ -4,7 +4,9 @@ const bodyParser = require('koa-bodyparser')
 const sessionMiddleware = require('./middlewares/session-middleware')
 const router = require('./app/routes')
 const app = new Koa()
+const cors = require('@koa/cors');
 
+app.use(cors())
 app.use(async function (ctx, next) {
   if (!ctx.accepts('application/json')) {
     ctx.throw(400, 'Must accepts type application/json')

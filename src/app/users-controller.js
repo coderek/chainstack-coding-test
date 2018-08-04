@@ -9,14 +9,16 @@ module.exports = {
     const {email, password} = ctx.request.body
     //TODO validation
     try {
-      await db.createUser(email, password)
+      const created = await db.createUser(email, password)
       ctx.body = {
         message: 'User is created successfully',
+        id: created.id
       }
     } catch (e) {
       ctx.body = {
         error: e.toString(),
       }
+      ctx.status = 500
     }
   },
   async delete(ctx) {
