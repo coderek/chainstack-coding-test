@@ -15,6 +15,36 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
+ALTER TABLE ONLY public.resources DROP CONSTRAINT resources_users_id_fk;
+DROP INDEX public.users_email_uindex;
+DROP INDEX public.sessions_session_id_uindex;
+ALTER TABLE ONLY public.users DROP CONSTRAINT users_id_pk;
+ALTER TABLE ONLY public.sessions DROP CONSTRAINT sessions_pkey;
+ALTER TABLE public.users ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.resources ALTER COLUMN id DROP DEFAULT;
+DROP SEQUENCE public.users_id_seq;
+DROP TABLE public.users;
+DROP TABLE public.sessions;
+DROP SEQUENCE public.resources_id_seq;
+DROP TABLE public.resources;
+DROP EXTENSION plpgsql;
+DROP SCHEMA public;
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
 --
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
@@ -168,6 +198,13 @@ CREATE UNIQUE INDEX users_email_uindex ON public.users USING btree (email);
 
 ALTER TABLE ONLY public.resources
     ADD CONSTRAINT resources_users_id_fk FOREIGN KEY (owner) REFERENCES public.users(id);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
