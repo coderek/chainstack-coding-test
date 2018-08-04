@@ -35,4 +35,44 @@ module.exports = {
       ($1, $2)
     `, [email, bcrypt.hashSync(password, 10)])
   },
+  listUsers() {
+    return client.query(`
+      SELECT * FROM users
+    `).then(result => result.rows)
+  },
+  deleteUser(userId) {
+    return client.query(`
+      DELETE FROM users WHERE id=$1
+    `, [userId])
+  },
+  listResources() {
+    return client.query(`
+      SELECT * FROM resources
+    `).then(result => result.rows)
+  },
+  listUserResources(userId) {
+    return client.query(`
+      SELECT * FROM resources WHERE owner=$1
+    `, [userId]).then(result => result.rows)
+  },
+  deleteResource(resourceId) {
+    return client.query(`
+      DELETE FROM resources WHERE id=$1
+    `, [resourceId])
+  },
+  deleteUserResource(resourceId, userId) {
+    return client.query(`
+      DELETE FROM resources WHERE id=$1 AND owner=$2
+    `, [resourceId, userId])
+  },
+  createResource(name, owner) {
+    return client.query(`
+      INSERT INTO resources (name, owner) VALUES ($1, $2) RETURNING id
+    `, [name, owner]).then(result => result.rows[0])
+  },
+  setQuota(userId, newQuota) {
+    return client.query(`
+      UPDATE users SET quota=$1 WHERE id=$2
+    `, [newQuota, userId])
+  }
 }
