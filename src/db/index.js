@@ -1,5 +1,6 @@
 const {Client} = require('pg')
 const moment = require('moment')
+const bcrypt = require('bcrypt')
 
 const client = new Client({
   user: 'cs',
@@ -27,5 +28,11 @@ module.exports = {
     return client.query(
       'INSERT INTO sessions (session_id, user_id, expires_at) VALUES ($1, $2, $3)',
       [sessionId, userId, moment().add(2, 'hours').toDate()])
+  },
+  createUser(email, password) {
+    return client.query(`
+      INSERT INTO users (email, password_hash) VALUES
+      ($1, $2)
+    `, [email, bcrypt.hashSync(password, 10)])
   },
 }
