@@ -23,7 +23,7 @@ module.exports = {
       message: 'Created successfully',
       id: created.id
     }
-    // admin has negative quota
+    // Negative quota means infinite
     if (user.quota>0) {
       await db.setQuota(user.id, user.quota - 1)
     }
