@@ -2,8 +2,9 @@
 const axios = require('axios')
 const resetDb = require('./reset-db')
 
+console.log(process.env.SERVER_URL)
 const client = axios.create({
-  baseURL: process.env.TEST_SERVER_URL || 'http://localhost:3001'
+  baseURL: process.env.SERVER_URL || 'http://localhost:3001'
 })
 
 beforeEach(() => {

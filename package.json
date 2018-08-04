@@ -33,6 +33,6 @@
   "license": "ISC",
   "jest": {
     "verbose": true,
-    "testURL": "http://localhost/"
+    "testEnvironment": "node"
   }
 }

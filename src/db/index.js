@@ -1,7 +1,7 @@
 const {Client} = require('pg')
 const moment = require('moment')
 const bcrypt = require('bcrypt')
-const config = require('../config.json')
+const config = require('../config')
 
 let dbConfig = null
 
