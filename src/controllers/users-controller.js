@@ -2,7 +2,10 @@ const db = require('../db')
 
 module.exports = {
   async list(ctx) {
-    ctx.body = await db.listUsers()
+    ctx.body = await db.listUsers().then(users => users.map(u => {
+      delete u.password_hash
+      return u
+    }))
   },
 
   async post(ctx) {
