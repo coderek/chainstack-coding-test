@@ -2,7 +2,7 @@ const usersController = require('./controllers/users-controller')
 const resourcesController = require('./controllers/resources-controller')
 const authenticate = require('./controllers/authenticate')
 const Router = require('koa-router')
-
+const { getImpliedRoleSet } = require('./helpers')
 const routes = [
   ['/auth', 'POST', authenticate],
 
@@ -24,23 +24,6 @@ const rolesImplications = {
   'admin': ['normal'],
 }
 
-function getImpliedRoleSet(role) {
-
-  function dfs(visitedSet, target) {
-    if (visitedSet.has(target))
-      return
-    visitedSet.add(target)
-    for (const edge of (rolesImplications[target] || [])) {
-      dfs(visitedSet, edge)
-    }
-  }
-
-  const roleSet = new Set()
-  dfs(roleSet, role)
-
-  return roleSet
-}
-
 const router = new Router()
 routes.forEach(([route, method, action, roles]) => {
   router[method.toLowerCase()](route, async (ctx, next) => {
@@ -49,7 +32,7 @@ routes.forEach(([route, method, action, roles]) => {
       if (!user) {
         ctx.throw(401)
       }
-      const impliedRoleSet = getImpliedRoleSet(user.role)
+      const impliedRoleSet = getImpliedRoleSet(user.role, rolesImplications)
       if (!roles.some(r => impliedRoleSet.has(r))) {
         ctx.throw(401)
       }
