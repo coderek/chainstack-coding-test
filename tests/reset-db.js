@@ -3,10 +3,7 @@ const config = require('../src/config')
 const fs = require('fs')
 const path = require('path')
 
-
-
 function reset () {
-  console.log(config.database.main)
   const client = new Client(config.database.main)
   client.on('error', err=> console.error(err))
   client.connect()
