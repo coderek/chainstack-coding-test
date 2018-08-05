@@ -1,6 +1,10 @@
-docker-compose up --no-start test_db test_server
-docker-compose kill test_db test_server
-docker-compose start test_db
+chainstack_image=$(docker images --format "{{.Repository}}" | grep -w chainstack)
+if [ -z $chainstack_image ]; then
+    docker build -t chainstack .
+fi
+
+docker-compose down
+docker-compose up -d test_db
 test_db_container_id=$(docker-compose ps -q test_db)
 
 while [ -z $test_db_container_id ]
@@ -16,8 +20,8 @@ echo "test db container id $test_db_container_id"
 docker exec -i $test_db_container_id psql -U cs -d chainstack < src/db/schema.sql > /dev/null 2>&1
 docker exec -i $test_db_container_id psql -U cs -d chainstack < src/db/bootstrap.sql > /dev/null 2>&1
 
-docker-compose start test_server
-test_server_id=$(docker-compose ps -q test_db)
+docker-compose up -d test_server
+test_server_id=$(docker-compose ps -q test_server)
 
 while [ -z $test_server_id ]
 do

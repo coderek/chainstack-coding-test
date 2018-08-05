@@ -1,21 +1,10 @@
 # Chainstack coding test
 
-
-### First Step
-Build the chainstack image.  
-`docker build -t chainstack .` 
-
-
 ### Running test
 `./scripts/run-test.sh`
 
 ### Running server
-0. `docker-compose stop` in case the test_db is running.
-1. `docker-compose up server`  
-2. Initialize database (running once only after container creation)  
-`./scripts/init-db.sh` 
-3. Access API server at `http://0.0.0.0:3001`
-
+`./scripts/run-test.sh`
 
 ### APIs available
 1. `POST /auth` Login
@@ -33,3 +22,8 @@ After login successfully, you will get a token. Put the token in the `Authorizat
 For eg. token = 123456  
 `Authorization: Bearer 123455`  
 Default expiry time is 2 hours later.
+
+
+### Required header
+1. `Accespt: application/json`
+2. `Content-Type: application/json` for POST and PUT requests
