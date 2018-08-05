@@ -1,4 +1,4 @@
-/* global beforeAll, test, expect */
+/* global beforeAll, describe, it, expect */
 const axios = require('axios')
 const resetDb = require('./reset-db')
 
@@ -7,60 +7,64 @@ const client = axios.create({
 })
 
 let token = null
+let newUserId = null
 
-beforeEach(async () => {
-  await resetDb()
-  await client.post('/auth', {
-    email: 'admin@chainstack.com',
-    password: 'abc',
-  }).then(res => {
-    token = res.data.token
-  })
-})
+describe('Administer users', async () => {
 
-test('Test create/list/delete user', async () => {
-  let newUserId=null
-  await client.post('/users', {
-    email: 'aa@dd.com',
-    password: 'efs',
-  }, {
-    headers: {
-      'Authorization': 'Bearer ' + token,
-    },
-  }).then(res => {
-    expect(res.status).toBe(200)
-    expect(res.data.id).toBeDefined()
-    newUserId = res.data.id
-  })
-
-  await client.get('/users', {
-    headers: {
-      'Authorization': 'Bearer ' + token,
-    },
-  }).then(res => {
-    expect(res.data.length).toBe(2)
-    expect(res.data.map(u => u.email)).toContain('aa@dd.com')
-  })
-
-  await client.delete('/users/' + newUserId, {
-    headers: {
-      'Authorization': 'Bearer ' + token,
-    },
-  }).then(res => {
-    expect(res.status).toBe(200)
+  beforeAll(async () => {
+    await resetDb()
+    await client.post('/auth', {
+      email: 'admin@chainstack.com',
+      password: 'abc',
+    }).then(res => {
+      token = res.data.token
+    })
   })
 
 
-  await client.get('/users', {
-    headers: {
-      'Authorization': 'Bearer ' + token,
-    },
-  }).then(res => {
-    expect(res.data.length).toBe(1)
-    expect(res.data.map(u => u.email)).toContain('admin@chainstack.com')
+  it('should allow admin to manage users', async () => {
+    await client.post('/users', {
+      email: 'aa@dd.com',
+      password: 'efs',
+    }, {
+      headers: {
+        'Authorization': 'Bearer ' + token,
+      },
+    }).then(res => {
+      expect(res.status).toBe(200)
+      expect(res.data.id).toBeDefined()
+      newUserId = res.data.id
+    })
+
+    await client.get('/users', {
+      headers: {
+        'Authorization': 'Bearer ' + token,
+      },
+    }).then(res => {
+      expect(res.data.length).toBe(2)
+      expect(res.data.map(u => u.email)).toContain('aa@dd.com')
+    })
+
+    await client.delete('/users/' + newUserId, {
+      headers: {
+        'Authorization': 'Bearer ' + token,
+      },
+    }).then(res => {
+      expect(res.status).toBe(200)
+    })
+
+    await client.get('/users', {
+      headers: {
+        'Authorization': 'Bearer ' + token,
+      },
+    }).then(res => {
+      expect(res.data.length).toBe(1)
+      expect(res.data.map(u => u.email)).toContain('admin@chainstack.com')
+    })
+
+    await client.delete('/users/1').catch(error => {
+      expect(error.response.status).toBe(401)
+    })
   })
 
-  await client.delete('/users/1').catch(error => {
-    expect(error.response.status).toBe(401)
-  })
 })

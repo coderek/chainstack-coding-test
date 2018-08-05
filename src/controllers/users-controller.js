@@ -6,10 +6,10 @@ module.exports = {
   },
 
   async post(ctx) {
-    const {email, password} = ctx.request.body
+    const {email, password, role, quota} = ctx.request.body
     //TODO validation
     try {
-      const created = await db.createUser(email, password)
+      const created = await db.createUser(email, password, role, quota)
       ctx.body = {
         message: 'User is created successfully',
         id: created.id

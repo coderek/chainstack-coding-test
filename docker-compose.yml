@@ -31,6 +31,9 @@ services:
     depends_on:
       - test_server
     image: chainstack
+    volumes:
+      - './tests:/usr/src/app/tests'
+      - './src/db/schema.sql:/usr/src/app/src/db/schema.sql'
     environment:
       - SERVER_URL=http://test_server:3001
       - DB_URL=test_db
@@ -40,6 +43,9 @@ services:
     depends_on:
       - test_db
     image: chainstack
+    volumes:
+      - '.:/usr/src/app'
+      - '/usr/src/app/node_modules'
     environment:
       - DB_URL=test_db
     command: npm run dev

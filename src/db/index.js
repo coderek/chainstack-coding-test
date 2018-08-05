@@ -35,11 +35,11 @@ module.exports = {
       'INSERT INTO sessions (session_id, user_id, expires_at) VALUES ($1, $2, $3)',
       [sessionId, userId, moment().add(2, 'hours').toDate()])
   },
-  createUser(email, password) {
+  createUser(email, password, role='normal', quota=-1) {
     return getClient().query(`
-      INSERT INTO users (email, password_hash) VALUES
-      ($1, $2) RETURNING id
-    `, [email, bcrypt.hashSync(password, 10)]).then(result => result.rows[0])
+      INSERT INTO users (email, password_hash, role, quota) VALUES
+      ($1, $2, $3, $4) RETURNING id
+    `, [email, bcrypt.hashSync(password, 10), role, quota]).then(result => result.rows[0])
   },
   listUsers() {
     return getClient().query(`
