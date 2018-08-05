@@ -3,14 +3,14 @@ const config = require('../src/config')
 const fs = require('fs')
 const path = require('path')
 
-const client = new Client({
-  ...config.database.test
-})
 
-client.on('error', err=> console.error(err))
 
 function reset () {
+  console.log(config.database.main)
+  const client = new Client(config.database.main)
+  client.on('error', err=> console.error(err))
   client.connect()
+
   const schema = fs.readFileSync(path.resolve(__dirname, '../src/db/schema.sql'), 'utf8')
   const bootstrap = fs.readFileSync(path.resolve(__dirname, '../src/db/bootstrap.sql'), 'utf8')
 

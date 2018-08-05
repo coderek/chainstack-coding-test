@@ -16,12 +16,13 @@ services:
     ports:
       - '3001:3001'
     environment:
-      - NODE_ENV=production
       - DB_URL=db
     command: npm run start
 
   test_db:
     image: 'postgres'
+    ports:
+      - '5432:5432'
     environment:
       - POSTGRES_DB=chainstack
       - POSTGRES_USER=cs
@@ -40,6 +41,5 @@ services:
       - test_db
     image: chainstack
     environment:
-      - NODE_ENV=test
       - DB_URL=test_db
     command: npm run dev

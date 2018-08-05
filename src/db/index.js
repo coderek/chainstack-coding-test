@@ -9,19 +9,10 @@ let _client = null
 function getClient () {
   if (_client) 
     return _client
-  
-  let dbConfig = null
 
-  if (process.env.NODE_ENV === 'test') {
-    dbConfig = config.database.test
-  } else {
-    dbConfig = config.database.main
-  }
-
-  const client = new Client({
-    ...dbConfig
-  })
+  const client = new Client(config.database.main)
   client.connect()
+
   _client = client
   return client
 }
