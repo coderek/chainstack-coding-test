@@ -2,7 +2,7 @@ const db = require('./db')
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
 const sessionMiddleware = require('./middlewares/session-middleware')
-const router = require('./app/routes')
+const router = require('./routes')
 const app = new Koa()
 const cors = require('@koa/cors');
 

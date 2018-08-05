@@ -2,6 +2,8 @@ version: '3.4'
 services:
   db:
     image: 'postgres'
+    ports:
+      - '5434:5432'
     environment:
       - POSTGRES_DB=chainstack
       - POSTGRES_USER=cs
@@ -10,7 +12,7 @@ services:
   server:
     depends_on:
       - db
-    build: .
+    image: chainstack
     ports:
       - '3001:3001'
     environment:
@@ -27,7 +29,7 @@ services:
   test:
     depends_on:
       - test_server
-    build: .
+    image: chainstack
     environment:
       - SERVER_URL=http://test_server:3001
       - DB_URL=test_db
@@ -36,9 +38,7 @@ services:
   test_server:
     depends_on:
       - test_db
-    build: .
-    ports:
-      - '3001:3001'
+    image: chainstack
     environment:
       - NODE_ENV=test
       - DB_URL=test_db

@@ -15,20 +15,20 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
-ALTER TABLE ONLY public.resources DROP CONSTRAINT resources_users_id_fk;
-DROP INDEX public.users_email_uindex;
-DROP INDEX public.sessions_session_id_uindex;
-ALTER TABLE ONLY public.users DROP CONSTRAINT users_id_pk;
-ALTER TABLE ONLY public.sessions DROP CONSTRAINT sessions_pkey;
-ALTER TABLE public.users ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.resources ALTER COLUMN id DROP DEFAULT;
-DROP SEQUENCE public.users_id_seq;
-DROP TABLE public.users;
-DROP TABLE public.sessions;
-DROP SEQUENCE public.resources_id_seq;
-DROP TABLE public.resources;
-DROP EXTENSION plpgsql;
-DROP SCHEMA public;
+--ALTER TABLE ONLY public.resources DROP CONSTRAINT resources_users_id_fk;
+--DROP INDEX public.users_email_uindex;
+--DROP INDEX public.sessions_session_id_uindex;
+--ALTER TABLE ONLY public.users DROP CONSTRAINT users_id_pk;
+--ALTER TABLE ONLY public.sessions DROP CONSTRAINT sessions_pkey;
+--ALTER TABLE public.users ALTER COLUMN id DROP DEFAULT;
+--ALTER TABLE public.resources ALTER COLUMN id DROP DEFAULT;
+--DROP SEQUENCE public.users_id_seq;
+--DROP TABLE public.users;
+--DROP TABLE public.sessions;
+--DROP SEQUENCE public.resources_id_seq;
+--DROP TABLE public.resources;
+--DROP EXTENSION plpgsql;
+--DROP SCHEMA public;
 --
 -- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
 --

@@ -1,6 +1,6 @@
-const usersController = require('./users-controller')
-const resourcesController = require('./resources-controller')
-const authenticate = require('./authenticate')
+const usersController = require('./controllers/users-controller')
+const resourcesController = require('./controllers/resources-controller')
+const authenticate = require('./controllers/authenticate')
 const Router = require('koa-router')
 
 const routes = [
